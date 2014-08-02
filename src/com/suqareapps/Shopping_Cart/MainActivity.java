@@ -4,6 +4,7 @@ package com.suqareapps.Shopping_Cart;
 import android.app.ActionBar;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.*;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class MainActivity extends FragmentActivity {
+    public static final String SERVER_URL = "http://54.77.23.39:7777";
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
@@ -31,6 +33,10 @@ public class MainActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer);
+
+        // Override strictmode
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         FragmentManager fm = getSupportFragmentManager();
         fragments[CATEGORY] = fm.findFragmentById(R.id.category_fragment);

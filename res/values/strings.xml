@@ -3,6 +3,7 @@
     <string name="app_name">Shopping Cart</string>
     <string name="open_drawer">Shopping Cart</string>
     <string name="close_drawer">Shopping Cart</string>
+    <string name="SERVER_ADRESS">http://squaregmbh.cloudapp.net:7777</string>
     <string-array name="navigation_items">
         <item>Toate Produsele</item>
         <item>Magazine</item>
