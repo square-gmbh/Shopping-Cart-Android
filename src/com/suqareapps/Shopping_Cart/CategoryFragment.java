@@ -2,6 +2,7 @@ package com.suqareapps.Shopping_Cart;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.apache.http.client.ClientProtocolException;
@@ -64,6 +66,8 @@ public class CategoryFragment extends Fragment {
             categoryList.setVisibility(v.VISIBLE);
             connectionWarning.setVisibility(v.GONE);
 
+            final JSONArray finalMappings = mappings;
+
             categories = new ArrayList<String>();
             category_id = new ArrayList<String>();
 
@@ -77,8 +81,37 @@ public class CategoryFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
             categoryList.setAdapter(new CustomCategoryList(getActivity(), categories, category_id, mappings));
+
+            // add click listener
+            categoryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    final String category = categories.get(position);
+                    final String categoryID = category_id.get(position);
+                    final ArrayList<String> subclassArray = new ArrayList<String>();
+                    final ArrayList<String> subclassIdArray = new ArrayList<String>();
+
+                    // get the subclass array
+                    try {
+                        for (int i = 0; i < finalMappings.getJSONObject(position).getJSONArray("subclass").length(); ++i) {
+                            String mySubclass = finalMappings.getJSONObject(position).getJSONArray("subclass").getString(i);
+                            String mySubclassId = finalMappings.getJSONObject(position).getJSONArray("subclass_id").getString(i);
+                            subclassArray.add(mySubclass);
+                            subclassIdArray.add(mySubclassId);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    // send subclass to new activity
+                    Intent intent = new Intent(getActivity(), SubclassActivity.class);
+                    intent.putExtra("SUBCATEGORY", subclassArray);
+                    intent.putExtra("CATEGORY", category);
+                    intent.putExtra("SUBCATEGORY_ID", subclassIdArray);
+                    startActivity(intent);
+                }
+            });
         }
         return v;
     }
